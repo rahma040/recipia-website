@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ recipe.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recipe_details.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="btn back">← Back</a>
+        <div class="recipe-detail-card">
+            <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+            <h1>{{ recipe.title }}</h1>
+            <h3>Ingredients</h3>
+            <ul>
+                {% for ingredient in recipe.extendedIngredients %}
+                <li>{{ ingredient.name }}</li>
+                {% endfor %}
+            </ul>
+            <h3>Instructions</h3>
+            <div class="instructions">
+                {{ recipe.instructions | safe }}
+            </div>
+        </div>
+    </div>
+    <!-- Add this button near your recipe details -->
+<button class="add-to-playlist-btn" data-recipe-id="{{ recipe.id }}" data-recipe-name="{{ recipe.title }}">
+    Add to Playlist
+</button>
+
+<!-- Add this modal at the bottom of your template -->
+<div class="playlist-modal" id="playlistModal">
+    <div class="playlist-modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Add to Playlist</h3>
+        <div class="playlist-list">
+            <!-- Playlists will be loaded here dynamically -->
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Your Dashboard - Cook Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="dashboard-body">
+    <header>
+        <div class="header-content">
+            <div class="logo">COOK BOOK</div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+            <div class="header-user-avatar">
+                {% if session.profile_picture_url %}
+                <img src="{{ url_for('static', filename=session.profile_picture_url) }}" alt="User Avatar">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar">
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-grid-container">
+        <section class="dashboard-main-panel card">
+            <div class="panel-content-overlay">
+                <div class="welcome-user-info">
+                    <div class="welcome-avatar">
+                        {% if session.profile_picture_url %}
+                        <img src="{{ url_for('static', filename=session.profile_picture_url) }}"
+                            alt="{{ session.username }}'s avatar" class="dashboard-profile-pic">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="Default Avatar"
+                            class="dashboard-profile-pic default-avatar">
+                        {% endif %}
+                    </div>
+                    <div class="welcome-text">
+                        <h2>Hello, {{ session.username }}!</h2>
+                        <p>What culinary adventure awaits today?</p>
+                    </div>
+                </div>
+
+                <div class="recipe-search-dashboard">
+                    <h3><i class="fas fa-search"></i> Find Your Next Meal</h3>
+                    <form action="{{ url_for('process') }}" method="get" class="ingredient-form-combined">
+                        <div class="search-input-group">
+                            <label for="ingredients" class="sr-only">Enter ingredients separated by commas:</label>
+                            <input type="text" id="ingredients" name="ingredients" class="search-input-large"
+                                placeholder="Enter ingredients (e.g., chicken, rice, broccoli)" required>
+                            <button type="submit" class="btn btn-primary btn-search-large">
+                                <i class="fas fa-utensils"></i> Find Recipes
+                            </button>
+                        </div>
+                        <div class="form-group toggle-group">
+                            <label class="switch">
+                                <input type="checkbox" name="strict_mode" value="true">
+                                <span class="slider round"></span>
+                            </label>
+                            <span class="toggle-label">Strict Mode (Use ONLY these ingredients)</span>
+                        </div>
+                    </form>
+                    <small class="search-helper-text">Separate ingredients with a comma.</small>
+                </div>
+            </div>
+        </section>
+
+        {# === Grid Item 2: User Preferences === #}
+        <section class="user-prefs-card card">
+            <h3><i class="fas fa-cog"></i> Your Preferences</h3>
+            {% if session.dietary_preferences or session.allergies %}
+            {% if session.dietary_preferences %}
+            <p><strong><i class="fas fa-leaf"></i> Dietary Needs:</strong><br>{{ session.dietary_preferences | nl2br }}
+            </p>
+            {% endif %}
+            {% if session.allergies %}
+            <p><strong><i class="fas fa-exclamation-triangle"></i> Allergies:</strong><br>{{ session.allergies | nl2br
+                }}</p>
+            {% endif %}
+            <a href="{{ url_for('edit_profile') }}" class="btn btn-secondary btn-small">
+                <i class="fas fa-edit"></i> Edit Preferences
+            </a>
+            {% else %}
+            <p>You haven't set any dietary preferences or allergies yet.</p>
+            <a href="{{ url_for('edit_profile') }}" class="btn btn-secondary btn-small">
+                <i class="fas fa-plus-circle"></i> Add Preferences
+            </a>
+            {% endif %}
+            <p class="prefs-note"><small>(Filtering recipes by preferences coming soon!)</small></p>
+        </section>
+
+        {# === Grid Item 3: Favorite Recipes & Playlists === #}
+        <section class="saved-recipes-card card">
+            <div class="card-header-with-button">
+                <h3><i class="fas fa-heart"></i> My Favorite Recipes</h3>
+                <a href="#" class="btn btn-primary btn-small" id="togglePlaylistsBtn">
+                    <i class="fas fa-list"></i> Toggle Playlists
+                </a>
+            </div>
+
+            <div id="favoritesSection">
+                {% if favorites %}
+                <ul class="favorites-list">
+                    {% for favorite in favorites %}
+                    <li class="favorite-item">
+                        <span class="favorite-name">
+                            {{ favorite.recipe_name | title }}
+                            <small class="recipe-type">({{ favorite.recipe_type }})</small>
+                        </span>
+                        <form method="post" action="{{ url_for('remove_favorite') }}" class="remove-favorite-form">
+                            <input type="hidden" name="favorite_id" value="{{ favorite.id }}">
+                            <button type="submit" class="btn btn-danger btn-remove" title="Remove Favorite">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="placeholder-content">
+                    <i class="fas fa-heart-crack placeholder-icon"></i>
+                    <p>You haven't added any favorite recipes yet.</p>
+                    <p><small>Click the <i class="fas fa-heart"></i> icon on a recipe to save it here!</small></p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Playlist Section -->
+            <div id="playlistsSection" style="display: none;">
+                <div class="playlist-controls">
+                    <button id="createPlaylistBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create New Playlist
+                    </button>
+                </div>
+                
+                <div id="createPlaylistForm" style="display: none; margin: 15px 0;">
+                    <input type="text" id="playlistNameInput" placeholder="Enter playlist name" class="form-input">
+                    <button id="submitPlaylistBtn" class="btn btn-success">
+                        <i class="fas fa-check"></i> Create
+                    </button>
+                    <button id="cancelPlaylistBtn" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+                
+                <div class="playlists-container">
+                    {% if playlists %}
+                        {% for playlist in playlists %}
+                        <div class="playlist-card" data-playlist-id="{{ playlist.id }}">
+                            <div class="playlist-header">
+                                <h4>{{ playlist.name }}</h4>
+                                <button class="delete-playlist-btn" data-playlist-id="{{ playlist.id }}" title="Delete Playlist">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="playlist-items">
+                                {% if playlist_items[playlist.id] %}
+                                    {% for item in playlist_items[playlist.id] %}
+                                    <div class="playlist-item" data-item-id="{{ item.id }}">
+                                        <span>{{ item.recipe_name }}</span>
+                                        <button class="remove-from-playlist-btn" title="Remove from playlist">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="empty-playlist-message">No recipes in this playlist yet</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="placeholder-content">
+                            <i class="fas fa-list placeholder-icon"></i>
+                            <p>You don't have any playlists yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© Cook Book App</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle between favorites and playlists
+        const togglePlaylistsBtn = document.getElementById('togglePlaylistsBtn');
+        const favoritesSection = document.getElementById('favoritesSection');
+        const playlistsSection = document.getElementById('playlistsSection');
+        
+        togglePlaylistsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (favoritesSection.style.display === 'none') {
+                favoritesSection.style.display = 'block';
+                playlistsSection.style.display = 'none';
+                togglePlaylistsBtn.innerHTML = '<i class="fas fa-list"></i> Toggle Playlists';
+            } else {
+                favoritesSection.style.display = 'none';
+                playlistsSection.style.display = 'block';
+                togglePlaylistsBtn.innerHTML = '<i class="fas fa-heart"></i> Toggle Favorites';
+            }
+        });
+
+        // Playlist creation
+        const createPlaylistBtn = document.getElementById('createPlaylistBtn');
+        const createPlaylistForm = document.getElementById('createPlaylistForm');
+        const playlistNameInput = document.getElementById('playlistNameInput');
+        const submitPlaylistBtn = document.getElementById('submitPlaylistBtn');
+        const cancelPlaylistBtn = document.getElementById('cancelPlaylistBtn');
+        
+        createPlaylistBtn.addEventListener('click', function() {
+            createPlaylistForm.style.display = 'block';
+            createPlaylistBtn.style.display = 'none';
+            playlistNameInput.focus();
+        });
+        
+        cancelPlaylistBtn.addEventListener('click', function() {
+            createPlaylistForm.style.display = 'none';
+            createPlaylistBtn.style.display = 'block';
+            playlistNameInput.value = '';
+        });
+        
+        submitPlaylistBtn.addEventListener('click', function() {
+            const playlistName = playlistNameInput.value.trim();
+            if (!playlistName) {
+                alert('Please enter a playlist name');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('name', playlistName);
+            
+            fetch('/playlist/create', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to create playlist');
+            });
+        });
+
+        // Delete playlist
+        document.querySelectorAll('.delete-playlist-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const playlistId = this.getAttribute('data-playlist-id');
+                if (confirm('Are you sure you want to delete this playlist?')) {
+                    const formData = new FormData();
+                    formData.append('playlist_id', playlistId);
+                    
+                    fetch('/playlist/delete', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert('Error: ' + data.error);
+                        } else {
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to delete playlist');
+                    });
+                }
+            });
+        });
+
+        // Remove item from playlist
+        document.querySelectorAll('.remove-from-playlist-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemId = this.closest('.playlist-item').getAttribute('data-item-id');
+                const formData = new FormData();
+                formData.append('item_id', itemId);
+                
+                fetch('/playlist/remove_recipe', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to remove recipe from playlist');
+                });
+            });
+        });
+    });
+    <!-- Add this button where you want it in your dashboard.html -->
+    <div class="history-section">
+    <button class="view-history-btn" id="viewHistoryBtn">View History</button>
+    <div class="history-content" id="historyContent">
+        
+    </div>
+</div>
+    </script>
+</body>
+</html>

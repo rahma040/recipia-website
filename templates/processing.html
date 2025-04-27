@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Culinary Animation</title>
+    <style>
+        /* Inherit your existing theme colors */
+        body {
+            background: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .animation-container {
+            position: relative;
+            width: 800px;
+            height: 500px;
+        }
+
+        /* Cooking pot animation */
+        .cooking-pot {
+            position: absolute;
+            width: 200px;
+            height: 150px;
+            background: #222;
+            border-radius: 0 0 20px 20px;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .pot-handle {
+            position: absolute;
+            width: 80px;
+            height: 15px;
+            background: #444;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        .steam {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            animation: steam-rise 4s infinite;
+        }
+
+        /* Floating ingredients */
+        .floating-ingredient {
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .vegetable {
+            width: 30px;
+            height: 30px;
+        }
+
+        .carrot {
+            background: #F9A826;
+            clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+        }
+
+        .herb {
+            background: #7cba5d;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .bubble {
+            width: 15px;
+            height: 15px;
+            background: #F9A826;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        @keyframes steam-rise {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: translateY(-200px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Title style */
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            color: #222;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="animation-container">
+        <h2 class="title">🍳 Cooking in Progress...</h2>
+
+        <!-- Steam elements -->
+        <div class="steam" style="left: 40%;"></div>
+        <div class="steam" style="left: 50%; animation-delay: -1s;"></div>
+        <div class="steam" style="left: 60%; animation-delay: -2s;"></div>
+
+        <!-- Cooking pot -->
+        <div class="cooking-pot">
+            <div class="pot-handle"></div>
+
+            <!-- Floating ingredients inside pot -->
+            <div class="floating-ingredient carrot" style="left: 30%; top: 30%;"></div>
+            <div class="floating-ingredient herb" style="left: 60%; top: 50%;"></div>
+            <div class="floating-ingredient bubble" style="left: 45%; top: 70%;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Automatically redirect after the specified wait time
+        setTimeout(() => {
+            window.location.href = "{{ redirect_url }}";
+        }, parseInt("{{ wait_time }}", 10));
+
+        // (Optional) The dynamic bubble creation code can be added here if you want extra flair.
+    </script>
+</body>
+
+</html>

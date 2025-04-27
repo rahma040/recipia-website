@@ -1,0 +1,237 @@
+/* ========================================
+   Reset & Base Styles
+======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fef6f0;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-top: 160px; /* space for fixed navbar */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.784),rgba(0, 0, 0, 0.784))     ,
+                      url('https://imgs.search.brave.com/oMxwCZCQp3YcIRh-ypVHidgllv1lsqg5D9cp86GCv9c/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAxNi8x/Mi8yNi8xNy8yOC9z/cGFnaGV0dGktMTkz/MjQ2Nl8xMjgwLmpw/Zw');
+    background-size: 90%;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================
+   Navbar Styling
+======================================== */
+header {
+    width: 100%;
+    height: 85px;
+    margin-top: -15px;
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    max-width: 1400px;
+  
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo Section */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 100px;
+    width: auto;
+    display: block;
+}
+
+/* Nav Links */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #e2e2e2;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ff8c00;
+    border-color: #ff8c00;
+}
+
+/* ========================================
+   Form Container
+======================================== */
+.form-container {
+    max-width: 420px;
+    background-color: #eab17073;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 
+        0 0 25px rgba(255, 165, 0, 0.2),
+        0 8px 25px rgba(0, 0, 0, 0.05);
+    text-align: center;
+
+    /* Left aligned */
+    margin-left: 150px;
+    margin-top: -40px;
+}
+
+/* ========================================
+   Headings
+======================================== */
+h2 {
+    margin-bottom: 20px;
+    color: #192f0e;
+    font-size: 2rem;
+}
+
+/* ========================================
+   Input Groups
+======================================== */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #eb9a03;
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.4);
+}
+
+/* ========================================
+   Submit Button
+======================================== */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    background: linear-gradient(90deg, #ffa500, #ff8c00);
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(90deg, #ff8c00, #ffa500);
+    box-shadow: 0 0 12px rgba(255, 140, 0, 0.5);
+}
+
+/* ========================================
+   Extra Links & Messages
+======================================== */
+.toggle-form {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #efefef;
+}
+
+.toggle-form a {
+    color: #ff8c00;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.toggle-form a:hover {
+    text-decoration: underline;
+}
+
+.back-to-home {
+    margin-top: 15px;
+}
+
+.back-to-home a {
+    font-size: 0.85rem;
+    text-decoration: underline;
+    color: #ff8c00;
+}
+
+.back-to-home a:hover {
+    text-decoration: none;
+}
+
+/* ========================================
+   Error Message
+======================================== */
+.error-message {
+    background: #fff2e6;
+    color: #e65100;
+    font-size: 0.9rem;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* ========================================
+   Responsive Design
+======================================== */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 10px;
+        gap: 40px;
+    }
+
+    nav a {
+        padding: 6px 0;
+        width: 100%;
+    }
+
+    .form-container {
+        margin: 20px auto;
+        padding: 30px 20px;
+        width: 90%;
+    }
+
+    .logo img {
+        height: 60px;
+    }
+}

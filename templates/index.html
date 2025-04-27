@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cook Book</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/Recipia.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categories = [
+                "soup", "vegetarian", "grilling", "desserts", "salads",
+                "breakfast", "dinner", "appetizers", "drinks", "popular",
+                "international-cuisine", "breakfast-recipes", "chocolate-cake",
+                "chocolate-pudding", "japanese-noodles", "google-play", "app-store",
+                "vegetable1", "vegetable2", "vegetable3", "vegetable4",
+                "vegetable5", "vegetable6", "meals-for-kids"
+            ];
+
+            categories.forEach(category => {
+                fetch(`/api/photo/${category}`)
+                    .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok.')) // Check response status
+                    .then(data => {
+                        const imgElement = document.querySelector(`img[data-category="${category}"]`);
+                        if (imgElement && data.url) { // Check if element exists too
+                            imgElement.src = data.url;
+                        } else if (imgElement) {
+                            console.error(`No URL found for category: ${category}`);
+                            // Optionally set a fallback image or hide the element
+                            // imgElement.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.error(`Error fetching photo for category ${category}:`, error));
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <a href="{{ url_for('index') }}">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                    </a>
+                </div>
+                <nav>
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('profile') }}">Profile</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </nav>
+            </div>
+        </header>
+        <div class="auth-links">
+            <a href="{{ url_for('login') }}" class="login">Login</a>
+            <span>|</span>
+            <a href="{{ url_for('register') }}" class="signup">Sign Up</a>
+        </div>
+        <div class="container">
+            <h1>ANYBODY CAN COOK</h1>
+            <p>
+                Explore a world of culinary inspiration and master the art of cooking with our diverse collection of
+                mouthwatering recipes
+            </p>
+        </div>
+        {# === MODIFIED FORM === #}
+        <form action="{{ url_for('process') }}" method="get" class="search-form">
+            <input type="text" name="ingredients" placeholder="Search recipes..." class="search-input" required /> {#
+            Added required attribute #}
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </section>
+
+    <!-- Recipe Categories Section -->
+    <section class="recipe-categories">
+        <div class="container">
+            <h2 class="section-heading">OUR RECIPES</h2>
+            <div class="categories-grid">
+                <div class="category">
+                    <img data-category="soup" src="" alt="Soups & Stew">
+                    <p>SOUPS & STEW</p>
+                </div>
+                <div class="category">
+                    <img data-category="vegetarian" src="" alt="Vegetarian">
+                    <p>VEGETARIAN</p>
+                </div>
+                <div class="category">
+                    <img data-category="grilling" src="" alt="Grilling & BBQ">
+                    <p>GRILLING & BBQ</p>
+                </div>
+                <div class="category">
+                    <img data-category="desserts" src="" alt="Desserts">
+                    <p>DESSERTS</p>
+                </div>
+                <div class="category">
+                    <img data-category="salads" src="" alt="Salads">
+                    <p>SALADS</p>
+                </div>
+                <div class="category">
+                    <img data-category="breakfast" src="" alt="Breakfast">
+                    <p>BREAKFAST</p>
+                </div>
+                <div class="category">
+                    <img data-category="dinner" src="" alt="Dinner">
+                    <p>DINNER</p>
+                </div>
+                <div class="category">
+                    <img data-category="appetizers" src="" alt="Appetizers">
+                    <p>APPETIZERS</p>
+                </div>
+                <div class="category">
+                    <img data-category="drinks" src="" alt="Drinks">
+                    <p>DRINKS</p>
+                </div>
+                <div class="category">
+                    <img data-category="popular" src="" alt="Popular">
+                    <p>POPULAR</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Recipes Section -->
+    <section class="popular-recipes">
+        <div class="container">
+            <div class="popular-heading">
+                <h2 style="font-size: 40px;">The Most Popular <br>Recipes on <br>CookBook <br> Right Now</h2>
+                <p>Our community's favorite dishes this month</p>
+            </div>
+            <div class="recipes-grid">
+                <div class="recipe-card">
+                    <img data-category="chocolate-cake" src="" alt="Chocolate Cake">
+                    <div class="recipe-content">
+                        <h3>Double Chocolate Soufflé Cake</h3>
+                        <p>Rich, dense & satisfying chocolate dessert</p>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <img data-category="chocolate-pudding" src="" alt="Chocolate Pudding">
+                    <div class="recipe-content">
+                        <h3>Chocolate pudding & pork, strawberry vanilla pudding</h3>
+                    </div>
+                </div>
+                <div class="recipe-card">
+                    <img data-category="japanese-noodles" src="" alt="Japanese Noodles">
+                    <div class="recipe-content">
+                        <h3>Japanese noodles & savory broth with vegetables</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-cookbook">
+        <div class="container">
+            <h2 class="section-heading">WHY COOKBOOK?</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Tasty Recipes</h3>
+                    <p>Delicious, tried and tested recipes for every occasion</p>
+                </div>
+                <div class="feature">
+                    <h3>Easy Steps</h3>
+                    <p>Simple instructions for stress-free cooking</p>
+                </div>
+                <div class="feature">
+                    <h3>Social Features</h3>
+                    <p>Connect with other food lovers like you</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Don't Miss Section -->
+    <section class="dont-miss">
+        <div class="container">
+            <h2 class="section-heading">DON'T MISS</h2>
+            <div class="featured-grid">
+                <div class="featured-item">
+                    <img data-category="international-cuisine" src="" alt="International Cuisine">
+                    <div class="featured-overlay">
+                        <h3>INTERNATIONAL CUISINE</h3>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img data-category="breakfast-recipes" src="" alt="Breakfast Recipes">
+                    <div class="featured-overlay">
+                        <h3>BREAKFAST RECIPES</h3>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img data-category="meals-for-kids" src="" alt="Meals for Kids">
+                    <div class="featured-overlay">
+                        <h3>MEALS FOR KIDS</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <h3>About Us</h3>
+                    <p>Our mission at CookBook is to make everyday cooking fun, because we believe that cooking is one
+                        of the key pleasures in life. We provide easy-to-follow recipes that help you spend less time
+                        worrying about what to cook.</p>
+                    <div class="app-links">
+                        <img data-category="google-play" src="" alt="Google Play">
+                        <img data-category="app-store" src="" alt="App Store">
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>LEARN MORE</h3>
+                    <ul>
+                        <li><a href="#">Cookbook Community</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>FOLLOW US</h3>
+                    <div class="social-icons">
+                        <a href="#"><span>FB</span></a>
+                        <a href="#"><span>IG</span></a>
+                        <a href="#"><span>TW</span></a>
+                        <a href="#"><span>YT</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="vegetables-decoration">
+                <img data-category="vegetable1" src="" alt="Vegetable">
+                <img data-category="vegetable2" src="" alt="Vegetable">
+                <img data-category="vegetable3" src="" alt="Vegetable">
+                <img data-category="vegetable4" src="" alt="Vegetable">
+                <img data-category="vegetable5" src="" alt="Vegetable">
+                <img data-category="vegetable6" src="" alt="Vegetable">
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

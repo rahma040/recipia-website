@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <!-- Link to your new CSS or existing shared CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_profile.css') }}">
+    <!-- Or link to profile.css if styles are combined -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}"> <!-- Example shared CSS -->
+
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                </a>
+            </div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="edit-profile-container">
+
+
+
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('edit_profile') }}">
+            <!-- Profile Picture Section -->
+            <div class="form-section profile-picture-section">
+                <h2>Profile Picture</h2>
+                <div class="current-picture">
+                    {% if user.profile_picture_url %}
+                    <img src="{{ url_for('static', filename=user.profile_picture_url) }}" alt="Current Profile Picture"
+                        class="profile-picture-preview">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="remove_picture" value="1"> Remove Current Picture
+                    </label>
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/default_avatar.png') }}"
+                        alt="Default Profile Picture" class="profile-picture-preview">
+                    <!-- Add a default avatar image -->
+                    <p>No profile picture uploaded.</p>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="profile_picture">Upload New Picture (Max 2MB, JPG, PNG, GIF):</label>
+                    <input type="file" id="profile_picture" name="profile_picture"
+                        accept="image/png, image/jpeg, image/gif">
+                    <small>Leave blank to keep the current picture (unless 'Remove' is checked).</small>
+                </div>
+            </div>
+
+            <!-- Personal Information Section -->
+            <div class="form-section personal-info-section">
+                <h2>Personal Information</h2>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" disabled>
+                    <!-- Username usually not editable -->
+                    <small>Username cannot be changed.</small>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="first_name">First Name:</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ user.first_name or '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name:</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ user.last_name or '' }}">
+                </div>
+            </div>
+
+            <!-- Preferences Section -->
+            <div class="form-section preferences-section">
+                <h2>Preferences & Bio</h2>
+                <div class="form-group">
+                    <label for="dietary_preferences">Dietary Preferences:</label>
+                    <textarea id="dietary_preferences" name="dietary_preferences"
+                        rows="3">{{ user.dietary_preferences or '' }}</textarea>
+                    <small>e.g., Vegetarian, Vegan, Gluten-Free</small>
+                </div>
+                <div class="form-group">
+                    <label for="allergies">Allergies:</label>
+                    <textarea id="allergies" name="allergies" rows="3">{{ user.allergies or '' }}</textarea>
+                    <small>e.g., Peanuts, Shellfish, Dairy</small>
+                </div>
+                <div class="form-group">
+                    <label for="bio">About Me (Bio):</label>
+                    <textarea id="bio" name="bio" rows="5">{{ user.bio or '' }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('profile') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </main>
+
+</body>
+
+</html>

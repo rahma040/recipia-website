@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Recipe Ideas for {{ original_query.ingredients }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gemini_list.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="page-background">
+
+    {# --- Header with specific class --- #}
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                </a>
+            </div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="gemini-list-container">
+
+  
+        <p class="search-term">Based on: <strong>{{ original_query.ingredients }}</strong></p>
+        {% if original_query.strict_mode %}
+        <p class="search-term"><small>(Strict mode enabled)</small></p>
+        {% endif %}
+        <p class="api-source-notice">Powered by Gemini AI</p>
+
+
+        {% if error %}
+        {# --- Display Error Message --- #}
+        <div class="list-error-card card">
+            <h2><i class="fas fa-exclamation-triangle"></i> Error Generating Ideas</h2>
+            <p>Sorry, we couldn't generate recipe ideas based on your request.</p>
+            <p><strong>Details:</strong> {{ error }}</p>
+            <div class="error-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Try Again from Dashboard</a>
+            </div>
+        </div>
+
+        {% elif ideas %}
+        {# --- Display Grid of Recipe Ideas --- #}
+        <div class="ideas-grid">
+            {% for idea in ideas %}
+            {# Each card is a link to the detail view #}
+            <a href="{{ url_for('gemini_recipe_detail',
+                                     name=idea.name,
+                                     ingredients=original_query.ingredients,
+                                     diet=original_query.diet,
+                                     allergies=original_query.allergies,
+                                     exclude=original_query.exclude,
+                                     strict_mode='true' if original_query.strict_mode else 'false') }}"
+                class="idea-card-link">
+
+                <div class="idea-card card">
+                    {# --- Ensure this line uses the full idea.name --- #}
+                    <h4>{{ idea.name | title }}</h4>
+                    <p>{{ idea.description }}</p>
+                    <span class="view-details-prompt">View Full Recipe <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        {# --- Display if no ideas were returned (but not an error) --- #}
+        <div class="no-results-card card">
+            <h2><i class="fas fa-search"></i> No Ideas Found</h2>
+            <p>The AI couldn't generate specific recipe ideas for that combination. Please try adjusting your
+                ingredients.</p>
+            <div class="error-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+        {% endif %}
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© Cook Book App</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

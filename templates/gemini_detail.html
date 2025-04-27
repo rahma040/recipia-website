@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Recipe: {{ recipe.name if recipe and not recipe.error else 'Details' }}</title> {# Dynamic Title #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gemini_detail.css') }}"> {# Ensure CSS name matches
+    #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="page-background">
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                </a>
+            </div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="gemini-suggestion-container">
+
+
+
+        {# Display Title Area only if NOT an error #}
+        {% if recipe and not recipe.error %}
+        <h1><i class="fas fa-magic-wand-sparkles"></i> AI-Generated Recipe</h1>
+        <p class="search-term">Based on: <strong>{{ ingredients }}</strong></p> {# ingredients var might not be needed
+        here #}
+        <p class="api-source-notice">Powered by Gemini AI</p>
+        {% endif %}
+
+        {% if recipe and recipe.error %}
+        {# --- Display Error Message --- #}
+        <div class="recipe-card error-card">
+            <h2><i class="fas fa-exclamation-triangle"></i> Recipe Detail Error</h2>
+            <p>Sorry, we couldn't load the details for this recipe idea.</p>
+            <p><strong>Details:</strong> {{ recipe.error }}</p>
+            <div class="error-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+
+        {% elif recipe %}
+        {# --- Display Detailed Gemini Recipe --- #}
+        <div class="recipe-card gemini-recipe-card">
+            <h2>{{ recipe.name | title }}</h2>
+
+            <div class="recipe-meta">
+                <span><i class="fas fa-users"></i> <strong>Servings:</strong> {{ recipe.servings }}</span>
+            </div>
+
+            <div class="recipe-content-grid">
+                <div class="ingredients-section">
+                    <h3><i class="fas fa-list-ul"></i> Ingredients</h3>
+                    <ul>
+                        {% for item in recipe.ingredients %}
+                        <li>{{ item }}</li>
+                        {% else %}
+                        <li>No ingredients listed.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="instructions-section">
+                    <h3><i class="fas fa-shoe-prints"></i> Instructions</h3>
+                    <ol>
+                        {% for step in recipe.instructions %}
+                        <li>{{ step }}</li>
+                        {% else %}
+                        <li>No instructions provided.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            {# --- MODIFIED ACTIONS SECTION --- #}
+            <div class="recipe-actions">
+                {# Form to add to favorites #}
+                <form method="post" action="{{ url_for('add_favorite') }}" style="display: inline;">
+                    {# Pass necessary data as hidden fields #}
+                    <input type="hidden" name="recipe_type" value="gemini">
+                    {# Use the detail_hash passed from the backend route #}
+                    <input type="hidden" name="recipe_identifier" value="{{ detail_hash }}">
+                    {# Pass the recipe name #}
+                    <input type="hidden" name="recipe_name" value="{{ recipe.name }}">
+
+                    <button type="submit" class="btn btn-primary"> {# Removed btn-save-recipe class unless needed for JS
+                        later #}
+                        <i class="fas fa-heart"></i> Save as Favorite
+                    </button>
+                </form>
+
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Generate Another</a>
+            </div>
+            {# --- END MODIFIED ACTIONS --- #}
+        </div>
+
+        {% else %}
+        {# --- Fallback if recipe object is somehow missing --- #}
+        <div class="recipe-card error-card">
+            <h2><i class="fas fa-question-circle"></i> Error</h2>
+            <p>Something went wrong, and no recipe data was available to display.</p>
+            <div class="error-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+        {% endif %}
+
+    </main>
+
+   
+
+</body>
+
+</html>

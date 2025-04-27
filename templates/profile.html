@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.username }}'s Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+                </a>
+            </div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        </div>
+    </header>
+    
+
+    <main class="profile-container">
+        <!-- Left Content (Profile Info) -->
+        <div class="profile-content">
+            <div class="profile-header">
+                <!-- Profile Picture -->
+                <div class="profile-picture-container">
+                    {% if user.profile_picture_url %}
+                    <img src="{{ url_for('static', filename=user.profile_picture_url) }}" alt="Profile Picture"
+                        class="profile-picture">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/default_avatar.png') }}"
+                        alt="Default Profile Picture" class="profile-picture default-avatar">
+                    {% endif %}
+                </div>
+
+                <!-- Basic Info -->
+                <div class="profile-basic-info">
+                    <h2>{{ user.username }}</h2>
+                    {% if user.first_name or user.last_name %}
+                    <p class="user-name">{{ user.first_name }} {{ user.last_name }}</p>
+                    {% endif %}
+                    <p class="user-email">{{ user.email }}</p>
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-edit-profile">Edit Profile</a>
+                </div>
+            </div>
+
+            <!-- Detailed Profile Information -->
+            <section class="profile-details">
+                {% if user.bio %}
+                <div class="profile-section">
+                    <h3>About Me</h3>
+                    <p>{{ user.bio | nl2br }}</p>
+                </div>
+                {% endif %}
+
+                {% if user.dietary_preferences %}
+                <div class="profile-section">
+                    <h3>Dietary Preferences</h3>
+                    <p>{{ user.dietary_preferences | nl2br }}</p>
+                </div>
+                {% endif %}
+
+                {% if user.allergies %}
+                <div class="profile-section">
+                    <h3>Allergies</h3>
+                    <p>{{ user.allergies | nl2br }}</p>
+                </div>
+                {% endif %}
+
+                {% if not user.bio and not user.dietary_preferences and not user.allergies %}
+                <p>No additional profile information provided yet.</p>
+                <p><a href="{{ url_for('edit_profile') }}">Add your details!</a></p>
+                {% endif %}
+            </section>
+        </div>
+        <div class="profile-side-image">
+            <img src="{{ url_for('static', filename='images/side.png') }}" alt="side">
+
+        </div>
+        
+        <!-- Right Content (Illustration Image) -->
+     
+    </main>
+
+    <footer>
+        <a href="{{ url_for('dashboard') }}" class="return-dashboard-btn">←Return to Dashboard</a>
+    </footer>
+</body>
+
+</html>

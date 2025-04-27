@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search History - Cook Book</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <header>
+        <div class="header-content">
+            <div class="logo">COOK BOOK</div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+            <div class="header-user-avatar">
+                {% if session.profile_picture_url %}
+                <img src="{{ url_for('static', filename=session.profile_picture_url) }}" alt="User Avatar">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar">
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="search-history-container">
+        <section class="search-history-card card">
+            <div class="card-header-with-button">
+                <h1><i class="fas fa-history"></i> Your Search History</h1>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            {% if search_history %}
+            <div class="history-list">
+                {% for search in search_history %}
+                <div class="history-item">
+                    <div class="history-details">
+                        <h3>{{ search.ingredients }}</h3>
+                        <div class="history-meta">
+                            <span class="search-date">
+                                <i class="fas fa-calendar-alt"></i> 
+                                {{ search.search_date.strftime('%Y-%m-%d %H:%M') }}
+                            </span>
+                            <span class="search-mode">
+                                <i class="fas fa-{{ 'check-circle' if search.strict_mode else 'times-circle' }}"></i>
+                                {{ 'Strict Mode' if search.strict_mode else 'Flexible Mode' }}
+                            </span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('process', ingredients=search.ingredients, strict_mode=search.strict_mode) }}" 
+                       class="btn btn-primary">
+                        <i class="fas fa-redo"></i> Search Again
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h3>No search history yet</h3>
+                <p>Your searches will appear here after you start finding recipes</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>© Cook Book App</p>
+        </div>
+    </footer>
+</body>
+</html>

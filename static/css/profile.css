@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #ffebc4b2;
+    color: #000000;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 80px;
+    padding: 100px;
+}
+
+header {
+    width: 100%;
+    height: 75px;
+    box-shadow: 0 4px 12px rgba(198, 195, 189, 0.15);
+    background-color: #2222222a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Logo Section */
+.logo {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+}
+
+.logo img {
+    height: 100px;
+    width: auto;
+    display: block;
+}
+
+/* Nav Links */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ff8c00;
+    border-color: #ff8c00;
+}
+
+/* Centered Page Title */
+h1 {
+    text-align: center;
+    font-size: 50px;
+    letter-spacing: 3px;
+    margin-top: 40px;
+    color: #F9A826;
+}
+
+/* Profile Container Layout */
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff91;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
+}
+
+/* Left - Profile Info Section */
+.profile-content {
+    flex: 2;
+}
+
+/* Profile Picture */
+.profile-picture-container {
+    width: 180px;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 4px solid #F9A826;
+    background-color: #eee;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-basic-info {
+    margin-bottom: 20px;
+}
+
+.profile-basic-info h2 {
+    font-size: 2rem;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.profile-basic-info .user-name {
+    font-size: 1.15rem;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.profile-basic-info .user-email {
+    font-size: 1rem;
+    color: #777;
+}
+
+/* Profile Details */
+.profile-details {
+    margin-top: 10px;
+}
+
+.profile-section {
+    margin-bottom: 25px;
+}
+
+.profile-section h3 {
+    font-size: 1.3rem;
+    color: #F9A826;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 5px;
+}
+
+.profile-section p {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.75;
+    white-space: pre-wrap;
+}
+
+/* Right - Illustration Image */
+.profile-side-image {
+    flex: 1;
+    max-width: 350px;
+}
+
+.profile-side-image img {
+    width: 110%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    
+}
+
+/* Return to Dashboard Button */
+.return-dashboard-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    color: rgb(0, 0, 0);
+    padding: 12px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 99;
+}
+
+.return-dashboard-btn:hover {
+    color: #e29b1b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 16px 20px;
+    }
+
+    header nav {
+        margin-top: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-side-image {
+        max-width: 100%;
+        margin-top: 30px;
+    }
+
+    .profile-picture-container {
+        width: 120px;
+    }
+
+    .profile-picture {
+        height: 120px;
+    }
+
+    .return-dashboard-btn {
+        width: calc(100% - 60px);
+        left: 30px;
+        right: 30px;
+        bottom: 20px;
+    }
+}

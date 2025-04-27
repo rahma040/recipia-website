@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/suggestions.css') }}">
+</head>
+<header>
+    <div class="header-content">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+        </div>
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<body>
+    <!-- Navigation Bar -->
+    
+    <!-- Recipe Suggestions Section -->
+    <section class="recipes-section">
+        <div class="container">
+            
+            <div class="recipe-grid">
+                {% for recipe in recipes %}
+                <div class="recipe-card">
+                    <img src="{{ recipe['image'] }}" alt="{{ recipe['title'] }}" />
+                    <div class="card-content">
+                        <h3>{{ recipe['title'] }}</h3>
+                        <a class="btn" href="{{ url_for('recipe', recipe_id=recipe['id']) }}">View Recipe Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

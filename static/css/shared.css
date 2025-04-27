@@ -1,0 +1,150 @@
+/* shared.css - Common styles for buttons, flash messages, etc. */
+
+/* Flash Messages */
+.flash-messages-container {
+    max-width: 800px;
+    /* Match container width */
+    margin: 1em auto -1em;
+    /* Position above main content */
+    padding: 0 15px;
+}
+
+.flash-messages .alert {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-error,
+.alert-danger {
+    /* Use danger for consistency */
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin: 5px;
+    /* Add some spacing */
+}
+
+.btn-primary,
+.btn-edit-profile {
+    /* Style edit button like primary */
+    background-color: #F9A826;
+    /* Your highlight yellow/orange */
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-edit-profile:hover {
+    background-color: #e89718;
+    /* Darker shade on hover */
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    /* A standard secondary color */
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* Basic Form Styling Elements (can be used in edit_profile.css) */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group input[type="text"]:disabled {
+    background-color: #e9ecef;
+    /* Grey out disabled fields */
+    cursor: not-allowed;
+}
+
+
+.form-group input[type="file"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    /* Allow vertical resize */
+    min-height: 80px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    /* Align checkbox and text */
+    align-items: center;
+    margin-left: 10px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    cursor: pointer;
+}
